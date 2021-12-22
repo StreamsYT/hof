@@ -1,0 +1,9 @@
+## Interface: 30000
+## Title: Hof
+## Author: zz#6108
+## Version: 1.0
+## Notes: Make spam clicking silas great again!
+## SavedVariables: verbose
+## SavedVariablesPerCharacter : spec enabled
+
+hof.lua
