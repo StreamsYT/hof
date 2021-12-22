@@ -5,6 +5,12 @@
 
 You will get a popup before this addon does anything first time you have this enabled & interact with Silas / Bruth on every session.
 
+#
+
+This is how easy it is to use.
+
+https://user-images.githubusercontent.com/96531379/147163863-b5731d4a-14f3-4d5c-9ac1-a77ab8aba0b9.mp4
+
 
 
 ## Few commands to list
