@@ -125,10 +125,11 @@ function misc:getQuestIndex(gossip, quest)
 end
 
 function misc:hofSpam(force)
-	if (spec == nil and hof_hint_spam >= interactions_before_spam) or force ~= nil then
+	misc:debug("spec: %s, hof_hint_spam: %s, interactions_before_spam: %s", tostring(hofSpec), tostring(hof_hint_spam), tostring(interactions_before_spam))
+	if (hofSpec == nil and hof_hint_spam >= interactions_before_spam) or force ~= nil then
 		misc:chat("pssst, set your spec for fast HOF handins with /hof set <spec number>")
 		hof_hint_spam = 0
-	elseif (spec == nil and hof_hint_spam <= interactions_before_spam) then
+	elseif (hofSpec == nil and hof_hint_spam <= interactions_before_spam) then
 		hof_hint_spam = hof_hint_spam + 1
 	end
 end
