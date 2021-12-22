@@ -14,7 +14,7 @@
 
 local hof, misc = {}, {}
 local session_enabled = nil
-local hof_hint_spam = 99
+local hof_hint_spam = 0
 
 --number of interactions before giving user a hint on how to set the spec
 local interactions_before_spam = 5
@@ -27,8 +27,12 @@ function misc:sprintf(format, ...)
 	return string.format(format, ...)
 end
 
-function misc:specializationString()
-	return misc:sprintf("Specialization %d:", hofSpec)
+function misc:specializationString(override)
+	if override ~= nil then
+		return misc:sprintf("Specialization %d:", override)
+	else
+		return misc:sprintf("Specialization %d:", hofSpec)
+	end
 end
 
 function misc:debug(format, ...)
@@ -123,7 +127,6 @@ function misc:hofSpam(force)
 	end
 end
 
-
 function hof:GOSSIP_SHOW(...)
 	misc:hofSpam()
 	if (hofEnabled ~= true or session_enabled == false) then
@@ -133,12 +136,15 @@ function hof:GOSSIP_SHOW(...)
 	local available = misc:gossipToTable({GetGossipAvailableQuests()})
 	local active = misc:gossipToTable({GetGossipActiveQuests()})
 
-	local activeIndex = misc:getQuestIndex(active, misc:specializationString())
-	local availableIndex = misc:getQuestIndex(available, misc:specializationString())
-	if (activeIndex ~= nil or availableIndex ~= nil) and hofSpec == nil then
-		misc:hofSpam(true)
+	if hofSpec == nil and (misc:getQuestIndex(active, misc:specializationString(1)) ~= nil or misc:getQuestIndex(available, misc:specializationString(1)) ~= nil) then -- peek at quests available.
+		misc:hofSpam(true) -- tell the user how to set the spec number in chat.
 		return
 	end
+
+
+
+	local activeIndex = misc:getQuestIndex(active, misc:specializationString())
+	local availableIndex = misc:getQuestIndex(available, misc:specializationString())
 
 	if activeIndex ~= nil then
 		if (session_enabled == nil) then
@@ -197,7 +203,7 @@ function hof:PLAYER_LOGIN(...)
 	end
 
 	if (hofDebug == nil) then
-		hofDebug = true
+		hofDebug = false
 	end
 end
 
