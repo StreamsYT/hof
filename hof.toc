@@ -1,7 +1,7 @@
 ## Interface: 30000
 ## Title: Hof
 ## Author: zz#6108
-## Version: 1.0
+## Version: 1.1.2
 ## Notes: Make spam clicking silas great again!
 ## SavedVariables: hofDebug
 ## SavedVariablesPerCharacter: hofSpec hofEnabled
