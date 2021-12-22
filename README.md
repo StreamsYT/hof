@@ -1,7 +1,9 @@
-# Hof is a small addon to make accepting & turning in the Hand of Fate quests faster.
+# What is hof?
+> hof is a small addon to make accepting & turning the `Hand of Fate` quests faster on Ascension. 
+> It accepts the quests, and turns it in for you - All you have to do is spam right click on Silas / Bruth.
 
 
-sidenote: You will get a popup before this addon does anything first time you have this enabled & interact with Silas / Bruth on every session.
+You will get a popup before this addon does anything first time you have this enabled & interact with Silas / Bruth on every session.
 
 
 
