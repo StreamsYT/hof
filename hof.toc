@@ -3,7 +3,7 @@
 ## Author: zz#6108
 ## Version: 1.0
 ## Notes: Make spam clicking silas great again!
-## SavedVariables: verbose
-## SavedVariablesPerCharacter : spec enabled
+## SavedVariables: hofDebug
+## SavedVariablesPerCharacter : hofSpec hofEnabled
 
 hof.lua

@@ -28,25 +28,26 @@ function misc:sprintf(format, ...)
 end
 
 function misc:specializationString()
-	return misc:sprintf("Specialization %d:", spec)
+	return misc:sprintf("Specialization %d:", hofSpec)
 end
 
 function misc:debug(format, ...)
-	if (debug ~= nil and debug == true) then
+	if (hofDebug ~= nil and hofDebug == true) then
 		misc:chat("debug - %s", misc:sprintf(format, ...))
 	end
 end
 
 function misc:getHumanReadableSpec()
-	if (spec == nil) then
+	if (hofSpec == nil) then
 		return "<not set>"
 	else
-		return tostring(spec)
+		return tostring(hofSpec)
 	end
 end
 
 function misc:getStateHumanReadable()
-	if (enabled) then
+	misc:debug("state: %s", tostring(hofEnabled))
+	if (hofEnabled) then
 		return "enabled"
 	else
 		return "disabled"
@@ -125,7 +126,7 @@ end
 
 function hof:GOSSIP_SHOW(...)
 	misc:hofSpam()
-	if (enabled ~= true or session_enabled == false) then
+	if (hofEnabled ~= true or session_enabled == false) then
 		return;
 	end
 	
@@ -134,7 +135,7 @@ function hof:GOSSIP_SHOW(...)
 
 	local activeIndex = misc:getQuestIndex(active, misc:specializationString())
 	local availableIndex = misc:getQuestIndex(available, misc:specializationString())
-	if (activeIndex ~= nil or availableIndex ~= nil) and spec == nil then
+	if (activeIndex ~= nil or availableIndex ~= nil) and hofSpec == nil then
 		misc:hofSpam(true)
 		return
 	end
@@ -159,7 +160,7 @@ function hof:GOSSIP_SHOW(...)
 end
 
 function hof:QUEST_DETAIL(...)
-	if (enabled ~= true or session_enabled == false or spec == nil) then
+	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
 		return;
 	end
 	misc:debug("QUEST_DETAIL AcceptQuest")
@@ -167,7 +168,7 @@ function hof:QUEST_DETAIL(...)
 end
 
 function hof:QUEST_COMPLETE(...)
-	if (enabled ~= true or session_enabled == false or spec == nil) then
+	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
 		return;
 	end
 	misc:debug("QUEST_COMPLETE GetQuestReward")
@@ -175,7 +176,7 @@ function hof:QUEST_COMPLETE(...)
 end
 
 function hof:QUEST_PROGRESS(...)
-	if (enabled ~= true or session_enabled == false or spec == nil) then
+	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
 		return;
 	end
 	misc:debug("QUEST_PROGRESS CompleteQuest")
@@ -184,21 +185,24 @@ end
 
 function hof:PLAYER_LOGIN(...)
 	misc:debug("PLAYER_LOGIN fired")
+	misc:createDialog();
+
+	
 	if (spec == nil) then
 		misc:printHelp()
+	end
+
+	if (hofEnabled == nil) then
+		hofEnabled = true
+	end
+
+	if (hofDebug == nil) then
+		hofDebug = true
 	end
 end
 
 function hof:ADDON_LOADED(...)
 	misc:debug("ADDON_LOADED fired")
-	misc:createDialog();
-	if (enabled == nil) then
-		enabled = true
-	end
-
-	if (debug == nil) then
-		debug = false
-	end
 end
 
 local hofFrame = CreateFrame("Frame")
@@ -231,7 +235,7 @@ function cmdCommands:set(specNumber)
 	if (specNumber ~= nil and specNumber ~= "") then
 		specNumber = tonumber(specNumber);
 		if (specNumber >= 1 and specNumber <= 12) then -- 12 specs available
-			spec = specNumber
+			hofSpec = specNumber
 			misc:chat("Your spec has been set to %d!", specNumber)
 			misc:createDialog()
 			return true
@@ -242,7 +246,7 @@ end
 
 function cmdCommands:enable()
 	misc:createDialog()
-	enabled = true
+	hofEnabled = true
 	session_enabled = nil
 	if (spec == nil) then
 		misc:chat("Enabled!")
@@ -253,7 +257,7 @@ function cmdCommands:enable()
 	return true
 end
 function cmdCommands:disable()
-	enabled = false
+	hofEnabled = false
 	session_enabled = nil
 	misc:chat("Disabled! I'm sure Silas is satisfied with the work you did.")
 	return true
@@ -261,7 +265,7 @@ end
 
 function cmdCommands:toggle()
 	
-	if (enabled == nil or enabled == false) then
+	if (hofEnabled == nil or hofEnabled == false) then
 		return cmdCommands:enable()
 	else
 		return cmdCommands:disable()
@@ -269,11 +273,11 @@ function cmdCommands:toggle()
 end
 
 function cmdCommands:verbose()
-	if (debug == nil or debug == false) then
-		debug = true;
+	if (hofDebug == nil or hofDebug == false) then
+		hofDebug = true;
 		misc:chat("Verbose logging enabled!")
 	else
-		debug = false;
+		hofDebug = false;
 		misc:chat("Verbose logging disabled!");
 	end
 
