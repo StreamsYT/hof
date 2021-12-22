@@ -114,6 +114,14 @@ function misc:createDialog()
 	}
 end
 
+function misc:isQuestName(quest)
+	if string.find(GetTitleText(), quest) then
+		return true
+	else
+		return false
+	end
+end
+
 function misc:getQuestIndex(gossip, quest)
 	for k, v in pairs(gossip) do
 		if string.find(v, quest) then
@@ -183,7 +191,10 @@ function hof:QUEST_DETAIL(...)
 		return
 	end
 	misc:debug("QUEST_DETAIL AcceptQuest")
-	AcceptQuest()
+	
+	if misc:isQuestName(misc:specializationString()) then
+		AcceptQuest()
+	end
 end
 
 function hof:QUEST_COMPLETE(...)
@@ -191,7 +202,10 @@ function hof:QUEST_COMPLETE(...)
 		return
 	end
 	misc:debug("QUEST_COMPLETE GetQuestReward")
-	GetQuestReward()
+	
+	if misc:isQuestName(misc:specializationString()) then
+		GetQuestReward()
+	end
 end
 
 function hof:QUEST_PROGRESS(...)
@@ -199,7 +213,9 @@ function hof:QUEST_PROGRESS(...)
 		return
 	end
 	misc:debug("QUEST_PROGRESS CompleteQuest")
-	CompleteQuest()
+	if misc:isQuestName(misc:specializationString()) then
+		CompleteQuest()
+	end
 end
 
 function hof:PLAYER_LOGIN(...)
