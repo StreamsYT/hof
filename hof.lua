@@ -66,7 +66,6 @@ function misc:isEnabled()
 	end
 end
 
-
 function misc:printHelp()
 	misc:chat("Hand of fate turnin made fast!")
 	misc:chat(misc:sprintf("Your current specialization number set for this is: %s", misc:getHumanReadableSpec())) --todo
@@ -93,13 +92,16 @@ end
 function misc:createDialog()
 	misc:debug("createDialog refreshed")
 	StaticPopupDialogs["HOF_CONFIRM"] = {
-		text = misc:sprintf("HOF is currently enabled, your spec number is set to %s\npress yes if you want to automatically accept & complete Hand of Fate quests?", misc:getHumanReadableSpec()),
+		text = misc:sprintf(
+			"HOF is currently enabled, your spec number is set to %s\npress yes if you want to automatically accept & complete Hand of Fate quests?",
+			misc:getHumanReadableSpec()
+		),
 		button1 = "Yes",
 		button2 = "No",
 		OnAccept = function()
 			misc:chat("Hof enabled for the session!")
 			session_enabled = true
-			hof:GOSSIP_SHOW();
+			hof:GOSSIP_SHOW()
 		end,
 		OnCancel = function()
 			misc:chat("Hof disabled for the session! type /hof enable to reset.")
@@ -108,8 +110,8 @@ function misc:createDialog()
 		timeout = 0,
 		whileDead = false,
 		hideOnEscape = true,
-		preferredIndex = 3,
-	  }
+		preferredIndex = 3
+	}
 end
 
 function misc:getQuestIndex(gossip, quest)
@@ -121,7 +123,6 @@ function misc:getQuestIndex(gossip, quest)
 
 	return nil --no quest id?
 end
-
 
 function misc:hofSpam(force)
 	if (spec == nil and hof_hint_spam >= interactions_before_spam) or force ~= nil then
@@ -135,25 +136,27 @@ end
 function hof:GOSSIP_SHOW(...)
 	misc:hofSpam()
 	if (hofEnabled ~= true or session_enabled == false) then
-		return;
-	end
-	
-	local available = misc:gossipToTable({GetGossipAvailableQuests()})
-	local active = misc:gossipToTable({GetGossipActiveQuests()})
-
-	if hofSpec == nil and (misc:getQuestIndex(active, misc:specializationString(1)) ~= nil or misc:getQuestIndex(available, misc:specializationString(1)) ~= nil) then -- peek at quests available.
-		misc:hofSpam(true) -- tell the user how to set the spec number in chat.
 		return
 	end
 
+	local available = misc:gossipToTable({GetGossipAvailableQuests()})
+	local active = misc:gossipToTable({GetGossipActiveQuests()})
 
+	if
+		hofSpec == nil and
+			(misc:getQuestIndex(active, misc:specializationString(1)) ~= nil or
+				misc:getQuestIndex(available, misc:specializationString(1)) ~= nil)
+	 then -- peek at quests available.
+		misc:hofSpam(true) -- tell the user how to set the spec number in chat.
+		return
+	end
 
 	local activeIndex = misc:getQuestIndex(active, misc:specializationString())
 	local availableIndex = misc:getQuestIndex(available, misc:specializationString())
 
 	if activeIndex ~= nil then
 		if (session_enabled == nil) then
-			StaticPopup_Show("HOF_CONFIRM");
+			StaticPopup_Show("HOF_CONFIRM")
 			return
 		end
 		misc:debug("found quest available for completion on index %s", tostring(activeIndex[1]))
@@ -161,7 +164,7 @@ function hof:GOSSIP_SHOW(...)
 	else
 		if availableIndex ~= nil then
 			if (session_enabled == nil) then
-				StaticPopup_Show("HOF_CONFIRM");
+				StaticPopup_Show("HOF_CONFIRM")
 				return
 			end
 			misc:debug("found quest available for pickup on index %s", tostring(availableIndex[1]))
@@ -172,7 +175,7 @@ end
 
 function hof:QUEST_DETAIL(...)
 	if misc:isEnabled() ~= true then
-		return;
+		return
 	end
 	misc:debug("QUEST_DETAIL AcceptQuest")
 	AcceptQuest()
@@ -180,7 +183,7 @@ end
 
 function hof:QUEST_COMPLETE(...)
 	if misc:isEnabled() ~= true then
-		return;
+		return
 	end
 	misc:debug("QUEST_COMPLETE GetQuestReward")
 	GetQuestReward()
@@ -188,7 +191,7 @@ end
 
 function hof:QUEST_PROGRESS(...)
 	if misc:isEnabled() ~= true then
-		return;
+		return
 	end
 	misc:debug("QUEST_PROGRESS CompleteQuest")
 	CompleteQuest()
@@ -196,9 +199,8 @@ end
 
 function hof:PLAYER_LOGIN(...)
 	misc:debug("PLAYER_LOGIN fired")
-	misc:createDialog();
+	misc:createDialog()
 
-	
 	if (spec == nil) then
 		misc:printHelp()
 	end
@@ -244,7 +246,7 @@ end
 
 function cmdCommands:set(specNumber)
 	if (specNumber ~= nil and specNumber ~= "") then
-		specNumber = tonumber(specNumber);
+		specNumber = tonumber(specNumber)
 		if (specNumber >= 1 and specNumber <= 12) then -- 12 specs available
 			hofSpec = specNumber
 			misc:chat("Your spec has been set to %d!", specNumber)
@@ -275,7 +277,6 @@ function cmdCommands:disable()
 end
 
 function cmdCommands:toggle()
-	
 	if (hofEnabled == nil or hofEnabled == false) then
 		return cmdCommands:enable()
 	else
@@ -285,14 +286,14 @@ end
 
 function cmdCommands:verbose()
 	if (hofDebug == nil or hofDebug == false) then
-		hofDebug = true;
+		hofDebug = true
 		misc:chat("Verbose logging enabled!")
 	else
-		hofDebug = false;
-		misc:chat("Verbose logging disabled!");
+		hofDebug = false
+		misc:chat("Verbose logging disabled!")
 	end
 
-	return true;
+	return true
 end
 
 function cmd:input(data)
@@ -310,12 +311,10 @@ function cmd:call()
 	for command, v in pairs(patterns) do
 		if (self.cmd:match(v)) then
 			if (self.cmd:match("^%w*", 1) == command) then
-
-
-				 --we're actually abusing a lua 'feature' here.. you may see the obvious bug, but it's intentional!
+				--we're actually abusing a lua 'feature' here.. you may see the obvious bug, but it's intentional!
 				local callArgs = {}
 				for str in self.cmd:gmatch("(%w+)") do
-						table.insert(callArgs, str) 
+					table.insert(callArgs, str)
 				end
 
 				return cmdCommands[command](unpack(callArgs))

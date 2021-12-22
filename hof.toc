@@ -4,6 +4,6 @@
 ## Version: 1.0
 ## Notes: Make spam clicking silas great again!
 ## SavedVariables: hofDebug
-## SavedVariablesPerCharacter : hofSpec hofEnabled
+## SavedVariablesPerCharacter: hofSpec hofEnabled
 
 hof.lua
