@@ -151,6 +151,10 @@ function hof:GOSSIP_SHOW(...)
 		return
 	end
 
+
+	if (hofSpec == nil) then
+		return
+	end
 	local activeIndex = misc:getQuestIndex(active, misc:specializationString())
 	local availableIndex = misc:getQuestIndex(available, misc:specializationString())
 
