@@ -8,7 +8,13 @@ sidenote: You will get a popup before this addon does anything first time you ha
 ## Few commands to list
 
 
-### Set your specialization
+
+##### You can view all the commands, your currently specified spec number and if this addon is enabled or not with
+```
+/hof
+```
+
+##### Set your specialization
 ```
 /hof set <spec number>
         for example:
