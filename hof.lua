@@ -58,9 +58,14 @@ function misc:getStateHumanReadable()
 	end
 end
 
-function misc:cleanSlashCmd(input)
-	msg = string.gsub(msg, "add", "")
+function misc:isEnabled()
+	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
+		return false
+	else
+		return true
+	end
 end
+
 
 function misc:printHelp()
 	misc:chat("Hand of fate turnin made fast!")
@@ -166,7 +171,7 @@ function hof:GOSSIP_SHOW(...)
 end
 
 function hof:QUEST_DETAIL(...)
-	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
+	if misc:isEnabled() ~= true then
 		return;
 	end
 	misc:debug("QUEST_DETAIL AcceptQuest")
@@ -174,7 +179,7 @@ function hof:QUEST_DETAIL(...)
 end
 
 function hof:QUEST_COMPLETE(...)
-	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
+	if misc:isEnabled() ~= true then
 		return;
 	end
 	misc:debug("QUEST_COMPLETE GetQuestReward")
@@ -182,7 +187,7 @@ function hof:QUEST_COMPLETE(...)
 end
 
 function hof:QUEST_PROGRESS(...)
-	if (hofEnabled ~= true or session_enabled == false or hofSpec == nil) then
+	if misc:isEnabled() ~= true then
 		return;
 	end
 	misc:debug("QUEST_PROGRESS CompleteQuest")
