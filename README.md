@@ -9,7 +9,8 @@ You will get a popup before this addon does anything first time you have this en
 
 This is how easy it is to use.
 
-https://user-images.githubusercontent.com/96531379/147163863-b5731d4a-14f3-4d5c-9ac1-a77ab8aba0b9.mp4
+https://user-images.githubusercontent.com/96531379/147263932-5a9158bf-4284-4f52-85a3-badac7f1bfb0.mp4
+
 
 
 
